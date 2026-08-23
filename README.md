@@ -23,7 +23,7 @@ npm -v
 ## Instalación
 
 ```bash
-git clone https://github.com/<tu-usuario>/gestor-contactos.git
+git clone https://github.com/luciM2003/gestor-contactos.git
 cd gestor-contactos
 npm install
 ```
