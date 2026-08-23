@@ -1,0 +1,56 @@
+[
+  {
+    "id": "0d7f2a1e-3c4b-4a91-8f2d-15b6c9e07a31",
+    "name": "Martina Aguirre",
+    "email": "martina.aguirre@codea.com",
+    "phone": "+54 261 415 8820",
+    "department": "Ventas"
+  },
+  {
+    "id": "1a9c6b83-5d21-4e07-9b44-2f8e51c3d0a7",
+    "name": "Bruno Salvatierra",
+    "email": "bruno.salvatierra@codea.com",
+    "phone": "+54 261 502 3317",
+    "department": "Desarrollo"
+  },
+  {
+    "id": "2f5e4d19-7a68-4c33-bd10-93a7e2f45c88",
+    "name": "Carolina Peralta",
+    "email": "carolina.peralta@codea.com",
+    "department": "Marketing"
+  },
+  {
+    "id": "3b8a0c47-9e52-4f16-a7d9-64c1b5e83f20",
+    "name": "Damián Ferreyra",
+    "email": "damian.ferreyra@codea.com",
+    "phone": "+54 261 688 1245",
+    "department": "Soporte"
+  },
+  {
+    "id": "4c1d9e26-2b73-4d58-8e01-af52c7d9b463",
+    "name": "Elena Quiroga",
+    "email": "elena.quiroga@codea.com",
+    "phone": "+54 261 733 9054",
+    "department": "Desarrollo"
+  },
+  {
+    "id": "5e2f8a03-6c94-4b27-91da-73e0f4a6c159",
+    "name": "Facundo Miranda",
+    "email": "facundo.miranda@codea.com",
+    "phone": "+54 261 290 7768",
+    "department": "Ventas"
+  },
+  {
+    "id": "6a3b7c58-1d09-4e64-82fb-5c94d1e70a26",
+    "name": "Gabriela Ojeda",
+    "email": "gabriela.ojeda@codea.com",
+    "department": "Marketing"
+  },
+  {
+    "id": "7d4e6f91-8b25-4a70-b3c8-1e60a5f2d947",
+    "name": "Ignacio Bustos",
+    "email": "ignacio.bustos@codea.com",
+    "phone": "+54 261 844 6631",
+    "department": "Soporte"
+  }
+]
