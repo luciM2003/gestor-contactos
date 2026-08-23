@@ -4,7 +4,7 @@ Aplicación web para listar, buscar, agregar y eliminar contactos de un equipo.
 Construida con **React + TypeScript + Tailwind CSS**, con formulario validado con
 **Formik + Yup**.
 
-🔗 **Demo:** _(pegar acá el link del deploy)_
+🔗 **Demo:** https://gestor-contactos-psi.vercel.app
 
 ---
 
