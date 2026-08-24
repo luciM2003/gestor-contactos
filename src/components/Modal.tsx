@@ -55,7 +55,7 @@ export function Modal({ open, title, description, onClose, children }: Props) {
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
-        className="w-full max-w-lg rounded-t-2xl bg-white shadow-xl motion-safe:animate-pop sm:rounded-2xl"
+        className="relative w-full max-w-lg overflow-hidden rounded-t-2xl bg-white shadow-xl motion-safe:animate-pop sm:rounded-2xl"
       >
         <header className="flex items-start justify-between gap-4 border-b border-line px-6 py-5">
           <div>
@@ -75,7 +75,7 @@ export function Modal({ open, title, description, onClose, children }: Props) {
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="-mr-2 rounded-lg p-2 text-muted transition-colors hover:bg-paper hover:text-ink"
+            className="-mr-2 rounded-lg p-2 text-muted transition-all duration-150 hover:bg-paper hover:text-ink active:scale-90"
           >
             <CloseIcon className="h-5 w-5" />
           </button>

@@ -1,8 +1,12 @@
+import { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { ContactDraft, Department } from "../types/contact";
 import { DEPARTMENTS, departmentStyles } from "../lib/departments";
-import { AlertIcon } from "./icons";
+import { AlertIcon, CheckIcon } from "./icons";
+
+/** Cuánto se muestra el aviso de "Contacto guardado" antes de cerrar el modal. */
+const SAVED_DELAY = 1300;
 
 type FormValues = {
   name: string;
@@ -48,7 +52,7 @@ function buildSchema(existingEmails: string[]) {
 }
 
 const fieldClass =
-  "w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:border-ink focus:outline-none";
+  "w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted transition-all duration-150 focus:border-ink focus:shadow-[0_0_0_3px_rgba(22,24,29,0.06)] focus:outline-none";
 
 const fieldErrorClass = "border-danger focus:border-danger";
 
@@ -56,7 +60,7 @@ function FieldError({ name }: { name: string }) {
   return (
     <ErrorMessage name={name}>
       {(message) => (
-        <p className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium text-danger">
+        <p className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium text-danger motion-safe:animate-fade">
           <AlertIcon className="h-3.5 w-3.5 shrink-0" />
           {message}
         </p>
@@ -68,10 +72,19 @@ function FieldError({ name }: { name: string }) {
 type Props = {
   existingEmails: string[];
   onSubmit: (draft: ContactDraft) => void;
+  onSaved: () => void;
   onCancel: () => void;
 };
 
-export function ContactForm({ existingEmails, onSubmit, onCancel }: Props) {
+export function ContactForm({ existingEmails, onSubmit, onSaved, onCancel }: Props) {
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (!saved) return;
+    const timer = window.setTimeout(onSaved, SAVED_DELAY);
+    return () => window.clearTimeout(timer);
+  }, [saved, onSaved]);
+
   return (
     <Formik
       initialValues={initialValues}
@@ -84,10 +97,22 @@ export function ContactForm({ existingEmails, onSubmit, onCancel }: Props) {
           phone: values.phone.trim() || undefined,
           department: values.department as Department,
         });
+        setSaved(true);
       }}
     >
       {({ values, errors, touched, isValid, setFieldValue, setFieldTouched }) => (
         <Form noValidate>
+          {saved && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-success px-6 text-center motion-safe:animate-fade">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/15 motion-safe:animate-check-pop">
+                <CheckIcon className="h-8 w-8 text-white" />
+              </span>
+              <p className="font-display text-xl font-bold text-white">
+                Contacto guardado
+              </p>
+            </div>
+          )}
+
           <div className="space-y-5 px-6 py-6">
             <div>
               <label
@@ -163,7 +188,7 @@ export function ContactForm({ existingEmails, onSubmit, onCancel }: Props) {
                   return (
                     <label
                       key={department}
-                      className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink ${
+                      className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-150 active:scale-[0.96] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink ${
                         isOn
                           ? departmentStyles[department].chipOn
                           : "border-line bg-white text-muted hover:border-ink hover:text-ink"
@@ -193,14 +218,14 @@ export function ContactForm({ existingEmails, onSubmit, onCancel }: Props) {
             <button
               type="button"
               onClick={onCancel}
-              className="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-ink"
+              className="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition-all duration-150 hover:border-ink active:scale-95"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={!isValid}
-              className="rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-35"
+              className="rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-all duration-150 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-35"
             >
               Guardar contacto
             </button>

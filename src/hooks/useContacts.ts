@@ -6,10 +6,24 @@ import initialContacts from "../data/data.json";
 /** Milisegundos de carga simulada para que se vea el skeleton. */
 const LOADING_DELAY = 900;
 
+/** Clave de localStorage donde vive la agenda completa. */
+const STORAGE_KEY = "gestor-contactos:contacts";
+
+/** Si ya hay una agenda guardada la usa; si no, siembra desde data.json. */
+function loadContacts(): Contact[] {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw) as Contact[];
+  } catch {
+    // localStorage bloqueado o con datos corruptos: se vuelve a sembrar.
+  }
+  return initialContacts as Contact[];
+}
+
 /**
- * Estado de la lista de contactos.
- * La carga inicial se hace desde data.json con un retardo simulado,
- * como si viniera de una API.
+ * Estado de la lista de contactos, persistido en localStorage.
+ * La carga inicial simula un retardo de red, como si viniera de una API,
+ * pero los datos y cada cambio (alta o baja) se guardan en el navegador.
  */
 export function useContacts() {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -20,7 +34,7 @@ export function useContacts() {
 
     const timer = window.setTimeout(() => {
       if (!active) return;
-      setContacts(initialContacts as Contact[]);
+      setContacts(loadContacts());
       setIsLoading(false);
     }, LOADING_DELAY);
 
@@ -29,6 +43,15 @@ export function useContacts() {
       window.clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if (isLoading) return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+    } catch {
+      // localStorage bloqueado (ej. modo privado): la sesión sigue en memoria.
+    }
+  }, [contacts, isLoading]);
 
   const addContact = useCallback((draft: ContactDraft) => {
     const contact: Contact = { id: uuid(), ...draft };

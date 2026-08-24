@@ -4,7 +4,6 @@ import { DEPARTMENTS } from "./lib/departments";
 import { normalize } from "./lib/text";
 import { useContacts } from "./hooks/useContacts";
 import { SearchBar } from "./components/SearchBar";
-import { DepartmentChips } from "./components/DepartmentChips";
 import { ContactRow } from "./components/ContactRow";
 import { ContactSkeleton } from "./components/ContactSkeleton";
 import { EmptyState } from "./components/EmptyState";
@@ -77,19 +76,20 @@ export default function App() {
           <button
             type="button"
             onClick={() => setFormOpen(true)}
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white transition-transform duration-150 hover:-translate-y-0.5 active:scale-95"
           >
             <PlusIcon className="h-4 w-4" />
             Agregar contacto
           </button>
         </header>
 
-        <section className="mt-8 space-y-3" aria-label="Filtros">
-          <SearchBar value={query} onChange={setQuery} />
-          <DepartmentChips
-            selected={selected}
-            onToggle={toggleDepartment}
-            onClear={() => setSelected([])}
+        <section className="mt-8" aria-label="Filtros">
+          <SearchBar
+            value={query}
+            onChange={setQuery}
+            selectedDepartments={selected}
+            onToggleDepartment={toggleDepartment}
+            onClearDepartments={() => setSelected([])}
             counts={counts}
           />
         </section>
@@ -101,7 +101,13 @@ export default function App() {
               className="font-mono text-[13px] tracking-tight text-muted"
             >
               {isLoading ? (
-                "Cargando contactos…"
+                <span className="inline-flex items-center gap-2">
+                  <span
+                    className="skeleton h-3.5 w-28 rounded"
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only">Cargando contactos…</span>
+                </span>
               ) : (
                 <>
                   <span className="font-medium text-ink">
@@ -118,7 +124,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="text-[13px] font-semibold text-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+                className="text-[13px] font-semibold text-muted underline-offset-4 transition-all duration-150 hover:text-ink hover:underline active:scale-95 motion-safe:animate-fade"
               >
                 Limpiar filtros
               </button>
@@ -154,10 +160,8 @@ export default function App() {
       >
         <ContactForm
           existingEmails={contacts.map((contact) => contact.email.toLowerCase())}
-          onSubmit={(draft) => {
-            addContact(draft);
-            setFormOpen(false);
-          }}
+          onSubmit={(draft) => addContact(draft)}
+          onSaved={() => setFormOpen(false)}
           onCancel={() => setFormOpen(false)}
         />
       </Modal>
